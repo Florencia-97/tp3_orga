@@ -1,7 +1,6 @@
 # TP3 - Organización del computador
 
-
 ### Integrantes:
 
-Nicolás Torres Dalmas
-Florencia Rodríguez
+* Nicolás Torres Dalmas
+* Florencia Rodríguez
