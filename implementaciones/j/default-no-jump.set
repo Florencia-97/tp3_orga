@@ -1,16 +1,33 @@
 {
 	"comment": "Instruction set of the reference book, without the jump instruction.",
 	"types": {
-		"R": [{"id": "op", "size": 6}, {"id": "rs", "size": 5}, {"id": "rt", "size": 5}, {"id": "rd", "size": 5}, {"id": "shamt", "size": 5}, {"id": "func", "size": 6}],
-		"I": [{"id": "op", "size": 6}, {"id": "rs", "size": 5}, {"id": "rt", "size": 5}, {"id": "imm", "size": 16}]
+		"R": [
+			{"id": "op", "size": 6}, 
+			{"id": "rs", "size": 5}, 
+			{"id": "rt", "size": 5}, 
+			{"id": "rd", "size": 5}, 
+			{"id": "shamt", "size": 5}, 
+			{"id": "func", "size": 6}
+			],
+		"I": [
+			{"id": "op", "size": 6}, 
+			{"id": "rs", "size": 5}, 
+			{"id": "rt", "size": 5}, 
+			{"id": "imm", "size": 16}
+			]
 	},
 	"instructions": {
 		"jadd": {
 			"type": "I", 
 			"args": ["reg", "reg"], 
-			"fields": {"op": 1, "rs": "#1", "rt":"#2", "imm": 0}, 
+			"fields": {"op": 2, "rs": "#1", "rt":"#2", "imm": 0}, 
 			"desc": "PC = $t1 + $t2"
 			 },
+		"beq":  {
+			"type": "I", 
+			"args": ["reg", "reg", "offset"], 
+			"fields": {"op": 4, "rs": "#1", "rt": "#2", "imm": "#3"}, 
+			"desc": "PC += ($t1 == $t2) ? (offset * 4 + 4) : 4"},
 		"nop":  {"type": "R", "fields": {"op": 0, "rs": 0, "rt": 0, "rd": 0, "shamt": 0, "func": 0}},
 		"add":  {"type": "R", "args": ["reg", "reg", "reg"], "fields": {"op": 0, "rs": "#2", "rt": "#3", "rd": "#1", "shamt": 0, "func": 32}, "desc": "$t1 = $t2 + $t3"},
 		"sub":  {"type": "R", "args": ["reg", "reg", "reg"], "fields": {"op": 0, "rs": "#2", "rt": "#3", "rd": "#1", "shamt": 0, "func": 34}, "desc": "$t1 = $t2 - $t3"},
@@ -19,7 +36,6 @@
 		"or":   {"type": "R", "args": ["reg", "reg", "reg"], "fields": {"op": 0, "rs": "#2", "rt": "#3", "rd": "#1", "shamt": 0, "func": 37}, "desc": "$t1 = $t2 | $t3"},
 		"slt":  {"type": "R", "args": ["reg", "reg", "reg"], "fields": {"op": 0, "rs": "#2", "rt": "#3", "rd": "#1", "shamt": 0, "func": 42}, "desc": "$t1 = ($t2 < $t3) ? 1 : 0"},
 		"addi": {"type": "I", "args": ["reg", "reg", "int"], "fields": {"op": 8, "rs": "#2", "rt": "#1", "imm": "#3"}, "desc": "$t1 = $t2 + 23"},
-		"beq":  {"type": "I", "args": ["reg", "reg", "offset"], "fields": {"op": 4, "rs": "#1", "rt": "#2", "imm": "#3"}, "desc": "PC += ($t1 == $t2) ? (offset * 4 + 4) : 4"},
 		"lw":   {"type": "I", "args": ["reg", "data"], "fields": {"op": 35, "rs": "#2.offset", "rt": "#1", "imm": "#2.base"}, "desc": "$t1 = MEM[base + $t2]"},
 		"sw":   {"type": "I", "args": ["reg", "data"], "fields": {"op": 43, "rs": "#2.offset", "rt": "#1", "imm": "#2.base"}, "desc": "MEM[base + $t2] = $t1"}
 	},
@@ -38,6 +54,7 @@
 	"control": {
 		"0": {"RegDst": 1, "RegWrite": 1, "ALUOp": 2, "ALUSrc": 0, "MemToReg": 0},
 		"1": {"RegDst": 1, "RegWrite": 1, "ALUOp": 2, "ALUSrc": 0, "MemToReg": 0},
+		"2": {"ALUOp": 0, "ALUSrc": 0, "JumpA": 1},
 		"8": {"RegDst": 0, "RegWrite": 1, "ALUOp": 0, "ALUSrc": 1, "MemToReg": 0},
 		"4": {"ALUOp": 1, "ALUSrc": 0, "Branch": 1},
 		"35": {"ALUOp": 0, "ALUSrc": 1, "RegDst": 0, "RegWrite": 1, "MemRead": 1, "MemWrite": 0, "MemToReg": 1},
